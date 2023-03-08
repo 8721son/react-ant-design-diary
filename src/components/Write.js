@@ -1,11 +1,11 @@
 import { Button, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import axios from "axios";
 import React, { useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Write = () => {
   const params = useParams();
-  console.log(params);
   const navigate = useNavigate();
 
   const refs = useRef({
@@ -16,8 +16,6 @@ const Write = () => {
   const save = () => {
     // 제목, 내용 가지고와서
     const { titleElement, contentElement } = refs.current;
-    console.log(titleElement.input.value);
-    console.log(contentElement.resizableTextArea.textArea.value);
 
     // 데이터를 만듬 {'title':'제목','content':"내용",date:'날짜'}
     const data = {
@@ -26,6 +24,16 @@ const Write = () => {
       date: params.date,
     };
     // axios 서버에 POST요청해서 저장
+    axios({
+      method: "post",
+      url: "http://localhost:8081/save",
+      data: data,
+    })
+      .then((response) => {
+        navigate("/");
+      })
+      .catch(() => {})
+      .finally(() => {});
   };
 
   const cancel = () => {
